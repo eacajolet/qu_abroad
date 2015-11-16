@@ -2,10 +2,17 @@
 {% block home %}
 <div class="intro-header">
   <div class="container">
+    {% if user.is_authenticated %}
+    <div class="jumbotron">
+        <h1>Glad you're back!</h1>
+    </div>
+    {% else %}
     <div class="intro-message">
       <h1>Welcome to QU Abroad</h1>
       <h3>The study abroad experience website for QU students</h3>
+      <p><a class="btn btn-lg btn-primary" href="{% url 'registration_register'  %}">Sign up</a></p>
     </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
