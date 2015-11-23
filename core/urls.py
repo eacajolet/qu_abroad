@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^trip/(?P<pk>\d+)/$', TripDetailView.as_view(), name='trip_detail'),
     url(r'^trip/update/(?P<pk>\d+)/$', TripUpdateView.as_view(), name='trip_update'),
     url(r'^trip/delete/(?P<pk>\d+)/$', TripDeleteView.as_view(), name='trip_delete'),
+    url(r'^trip/(?P<pk>\d+)/comment/create/$', CommentCreateView.as_view(), name='comment_create'),
 )

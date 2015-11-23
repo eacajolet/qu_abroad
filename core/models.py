@@ -14,3 +14,12 @@ class Trip(models.Model):
   
   def get_absolute_url(self):
       return reverse("trip_detail", args=[self.id])
+    
+class Comment(models.Model):
+    trip = models.ForeignKey(Trip)
+    user = models.ForeignKey(User)
+    created_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    
+    def __unicode__(self):
+        return self.text
