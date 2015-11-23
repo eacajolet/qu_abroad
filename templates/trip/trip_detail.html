@@ -3,4 +3,7 @@
 <h1>{{ trip.title }}</h1>
 <p>{{ trip.description }}</p>
 <p>Posted by {{ trip.user.username }} on {{ trip.created_at }}</p>
+{% if trip.user == user %}
+<p><a href="{% url 'trip_update' pk=trip.id %}">Edit trip</a></p>
+{% endif %}
 {% endblock %}

@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^trip/create/$', TripCreateView.as_view(), name='trip_create'),
     url(r'trip/$', TripListView.as_view(), name='trip_list'),
     url(r'^trip/(?P<pk>\d+)/$', TripDetailView.as_view(), name='trip_detail'),
+    url(r'^trip/update/(?P<pk>\d+)/$', TripUpdateView.as_view(), name='trip_update'),
 )
