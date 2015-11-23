@@ -6,4 +6,5 @@ urlpatterns = patterns('',
     url(r'^user/', include('registration.backends.simple.urls')),
     url(r'^user/', include('django.contrib.auth.urls')),
     url(r'^trip/create/$', TripCreateView.as_view(), name='trip_create'),
+    url(r'trip/$', TripListView.as_view(), name='trip_list'),
 )
