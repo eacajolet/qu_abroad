@@ -2,7 +2,7 @@
 {% block content %}
 {% for trip in object_list %}
 <div class="panel">
-    <h3>{{ trip.title }}</h3>
+    <h3><a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a></h3>
     <p>Posted by {{ trip.user.username }} on {{ trip.created_at }}</p>
 </div>
 {% endfor %}

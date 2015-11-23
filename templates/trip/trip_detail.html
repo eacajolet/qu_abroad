@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ trip.title }}</h1>
+<p>{{ trip.description }}</p>
+<p>Posted by {{ trip.user.username }} on {{ trip.created_at }}</p>
+{% endblock %}
