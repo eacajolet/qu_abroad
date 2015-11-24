@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<p class="lead">Are you sure you want to delete "{{ trip.title }}"</p>
+<p class="lead">Are you sure you want to delete "{{ trip.title }}"?</p>
 <form method="post" action="">
     {% csrf_token %}
     <button type="submit" class="btn btn-primary">Delete</button>
