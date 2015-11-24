@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<p class="lead">Hi "{{ user.username }}", you are a valued member of the QU_Abroad community! Are you sure you want to delete your account?</p>
+<form method="post" action="">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Delete</button>
+</form>
+{% endblock %}
