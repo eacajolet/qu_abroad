@@ -22,6 +22,7 @@ class TripCreateView(CreateView):
 class TripListView(ListView):
     model = Trip
     template_name = "trip/trip_list.html"
+    paginate_by = 5
 
 class TripDetailView(DetailView):
     model = Trip
