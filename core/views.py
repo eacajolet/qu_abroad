@@ -12,7 +12,7 @@ class Home(TemplateView):
 class TripCreateView(CreateView):
     model = Trip
     template_name = "trip/trip_form.html"
-    fields = ['title', 'description', 'rating']
+    fields = ['title', 'description']
     success_url = reverse_lazy('trip_list')
 
     def form_valid(self, form):
@@ -37,7 +37,7 @@ class TripDetailView(DetailView):
 class TripUpdateView(UpdateView):
     model = Trip
     template_name = 'trip/trip_form.html'
-    fields = ['title', 'description', 'rating']
+    fields = ['title', 'description']
 
     def get_object(self, *args, **kwargs):
             object = super(TripUpdateView, self).get_object(*args, **kwargs)
@@ -113,7 +113,7 @@ class VoteFormView(FormView):
             else:
                 prev_votes[0].delete()
             return redirect(reverse('trip_detail', args=[form.data["trip"]]))
-        except: 
+        except:
             prev_votes = Vote.objects.filter(user=user, trip=trip)
         has_voted = (prev_votes.count()>0)
         if not has_voted:
@@ -121,13 +121,13 @@ class VoteFormView(FormView):
         else:
             prev_votes[0].delete()
         return redirect('trip_list')
-      
+
 class UserDetailView(DetailView):
     model = User
     slug_field = 'username'
     template_name = 'user/user_detail.html'
     context_object_name = 'user_in_view'
-    
+
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
         user_in_view = User.objects.get(username=self.kwargs['slug'])
@@ -136,3 +136,18 @@ class UserDetailView(DetailView):
         comments = Comment.objects.filter(user=user_in_view)
         context['comments'] = comments
         return context
+
+class UserUpdateView(UpdateView):
+    model = User
+    slug_field = "username"
+    template_name = "user/user_form.html"
+    fields = ['email', 'first_name', 'last_name']
+
+    def get_success_url(self):
+        return reverse('user_detail', args=[self.request.user.username])
+
+    def get_object(self, *args, **kwargs):
+        object = super(UserUpdateView, self).get_object(*args, **kwargs)
+        if object != self.request.user:
+              raise PermissionDenied()
+        return object
