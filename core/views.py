@@ -24,6 +24,13 @@ class TripListView(ListView):
 class TripDetailView(DetailView):
     model = Trip
     template_name = 'trip/trip_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(TripDetailView, self).get_context_data(**kwargs)
+        trip = Trip.objects.get(id=self.kwargs['pk'])
+        comments = Comment.objects.filter(trip=trip)
+        context['comments'] = comments
+        return context
 
 class TripUpdateView(UpdateView):
     model = Trip

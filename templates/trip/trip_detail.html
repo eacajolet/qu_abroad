@@ -7,5 +7,14 @@
 <p><a href="{% url 'trip_update' pk=trip.id %}">Edit trip</a></p>
 <p><a href="{% url 'trip_delete' pk=trip.id %}">Delete trip</a></p>
 {% endif %}
+{% if comments.count > 0 %}
+<h3>{{ comments.count }} Comment{{ comments.count|pluralize }}:</h3>
+{% endif %}
+{% for comment in comments %}
+<div class="panel">
+    <p>{{ comment.text }}</p>
+    <p>Comment by {{ comment.user.username }} on {{ comment.created_at }}</p>
+</div>
+{% endfor %}
 <p><a href="{% url 'comment_create' pk=trip.id %}">Write comment</a></p>
 {% endblock %}
