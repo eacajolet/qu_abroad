@@ -4,6 +4,13 @@
 <div class="panel">
     <h3><a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a></h3>
     <p>Posted by {{ trip.user.username }} on {{ trip.created_at }}</p>
+    <p>{{ trip.vote_set.all.count }} Vote{{ trip.vote_set.all.count|pluralize }}</p>
+    <form method="post" action="{% url 'vote' %}">
+        {% csrf_token %}
+        <input type="hidden" name="trip" value="{{ trip.id }}" />
+        <input type="hidden" name="user" value="{{ user.id }}" />
+        <button>+</button>
+    </form>
 </div>
 {% endfor %}
 {% endblock %}
