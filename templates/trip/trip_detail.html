@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{ trip.title }}</h1>
+<p>{{ trip.description }}</p>
+<p>Posted by <a href="{% url 'user_detail' slug=trip.user.username %}">{{ trip.user.username }}</a> on {{ trip.created_at }}</p>
+{% if trip.user == user %}
+<p><a href="{% url 'trip_update' pk=trip.id %}">Edit trip</a></p>
+{% endif %}
+{% if comments.count > 0 %}
+<h3>{{ comments.count }} Comment{{ comments.count|pluralize }}:</h3>
+{% endif %}
 {% for comment in comments %}
 <div class="panel">
     <p>{{ comment.text }}</p>
@@ -8,8 +16,7 @@
     <p><a href="{% url 'comment_update' trip_pk=trip.id comment_pk=comment.id %}">Edit comment</a></p>
     <p><a href="{% url 'comment_delete' trip_pk=trip.id comment_pk=comment.id %}">Delete comment</a></p>
     {% endif %}
-    <p>Comment by {{ comment.user.username }} on {{ comment.created_at }}</p>
-    <p>{{ comment.vote_set.all.count }} Vote{{ comment.vote_set.all.count|pluralize }}</p>
+    <p>Comment by <a href="{% url 'user_detail' slug=comment.user.username %}">{{ comment.user.username }}</a> on {{ comment.created_at }} ({{ comment.vote_set.all.count }} Vote{{ comment.vote_set.all.count|pluralize }})</p>
     <form method="post" action="{% url 'vote' %}">
         {% csrf_token %}
         <input type="hidden" name="comment" value="{{ comment.id }}" />
