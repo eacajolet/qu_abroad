@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
+from django.core.exceptions import PermissionDenied
 from .models import *
 
 # Create your views here.
@@ -24,7 +25,7 @@ class TripListView(ListView):
 class TripDetailView(DetailView):
     model = Trip
     template_name = 'trip/trip_detail.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(TripDetailView, self).get_context_data(**kwargs)
         trip = Trip.objects.get(id=self.kwargs['pk'])
@@ -37,10 +38,22 @@ class TripUpdateView(UpdateView):
     template_name = 'trip/trip_form.html'
     fields = ['title', 'description']
 
+    def get_object(self, *args, **kwargs):
+            object = super(TripUpdateView, self).get_object(*args, **kwargs)
+            if object.user != self.request.user:
+                raise PermissionDenied()
+            return object
+
 class TripDeleteView(DeleteView):
     model = Trip
     template_name = 'trip/trip_confirm_delete.html'
     success_url = reverse_lazy('trip_list')
+    
+    def get_object(self, *args, **kwargs):
+            object = super(TripDeleteView, self).get_object(*args, **kwargs)
+            if object.user != self.request.user:
+                raise PermissionDenied()
+            return object
 
 class CommentCreateView(CreateView):
     model = Comment
@@ -54,20 +67,32 @@ class CommentCreateView(CreateView):
         form.instance.user = self.request.user
         form.instance.trip = Trip.objects.get(id=self.kwargs['pk'])
         return super(CommentCreateView, self).form_valid(form)
-      
+
 class CommentUpdateView(UpdateView):
     model = Comment
     pk_url_kwarg = 'comment_pk'
     template_name = 'comment/comment_form.html'
     fields = ['text']
-    
+
     def get_success_url(self):
         return self.object.trip.get_absolute_url()
       
+    def get_object(self, *args, **kwargs):
+            object = super(CommentUpdateView, self).get_object(*args, **kwargs)
+            if object.user != self.request.user:
+                raise PermissionDenied()
+            return object
+
 class CommentDeleteView(DeleteView):
     model = Comment
     pk_url_kwarg = 'comment_pk'
     template_name = 'comment/comment_confirm_delete.html'
-    
+
     def get_success_url(self):
         return self.object.trip.get_absolute_url()
+      
+    def get_object(self, *args, **kwargs):
+            object = super(CommentDeleteView, self).get_object(*args, **kwargs)
+            if object.user != self.request.user:
+                raise PermissionDenied()
+            return object
