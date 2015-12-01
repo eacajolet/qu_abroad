@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from .models import *
 from .forms import *
+from django.db.models import Avg
 
 # Create your views here.
 class Home(TemplateView):
@@ -33,6 +34,8 @@ class TripDetailView(DetailView):
         trip = Trip.objects.get(id=self.kwargs['pk'])
         comments = Comment.objects.filter(trip=trip)
         context['comments'] = comments
+        rating = Comment.objects.filter(trip=trip).aggregate(Avg('rating'))
+        context['rating'] = rating
         return context
 
 class TripUpdateView(UpdateView):
@@ -60,7 +63,7 @@ class TripDeleteView(DeleteView):
 class CommentCreateView(CreateView):
     model = Comment
     template_name = "comment/comment_form.html"
-    fields = ['text']
+    fields = ['text', 'rating']
 
     def get_success_url(self):
         return self.object.trip.get_absolute_url()
@@ -74,7 +77,7 @@ class CommentUpdateView(UpdateView):
     model = Comment
     pk_url_kwarg = 'comment_pk'
     template_name = 'comment/comment_form.html'
-    fields = ['text']
+    fields = ['text', 'rating']
 
     def get_success_url(self):
         return self.object.trip.get_absolute_url()
@@ -172,7 +175,7 @@ class UserDeleteView(DeleteView):
         user.is_active = False
         user.save()
         return redirect(self.get_success_url())
-      
+
 class SearchTripListView(TripListView):
     def get_queryset(self):
         incoming_query_string = self.request.GET.get('query','')

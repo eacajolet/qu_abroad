@@ -1,6 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{ trip.title }}</h1>
+
+{% if rating.rating__avg < 0.5 %}
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 1.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 2.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 3.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 4.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% else %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  ({{ rating.rating__avg }})
+{% endif %}
+
 <p>{{ trip.description }}</p>
 <p>Posted by <a href="{% url 'user_detail' slug=trip.user.username %}">{{ trip.user.username }}</a> on {{ trip.created_at }}</p>
 {% if trip.user == user %}

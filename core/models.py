@@ -2,6 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
+RATING_CHOICES = (
+(0, 'None'),
+(1, '*'),
+(2, '**'),
+(3, '***'),
+(4, '****'),
+(5, '*****'),
+)
+
 # Create your models here.
 class Trip(models.Model):
   title = models.CharField(max_length=1000)
@@ -14,21 +23,22 @@ class Trip(models.Model):
 
   def get_absolute_url(self):
       return reverse("trip_detail", args=[self.id])
-    
+
 
 class Comment(models.Model):
     trip = models.ForeignKey(Trip)
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+    rating = models.IntegerField(choices=RATING_CHOICES, default=0)
 
     def __unicode__(self):
         return self.text
-      
+
 class Vote(models.Model):
     user = models.ForeignKey(User)
     trip = models.ForeignKey(Trip, blank=True, null=True)
     comment = models.ForeignKey(Comment, blank=True, null=True)
-    
+
     def __unicode__(self):
         return "%s upvoted" % (self.user.username)
